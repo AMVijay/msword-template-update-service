@@ -17,6 +17,11 @@ import org.docx4j.wml.Text;
 import vijay.java.msword.update.service.IWordUpdateService;
 import vijay.java.msword.update.service.WordUpdateModel;
 
+/**
+ * Method to update Text nodes in word by matching the exact phrase.
+ * @author Vijay
+ *
+ */
 public class TextNodeUpdateService implements IWordUpdateService {
 
     @Override

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import vijay.poc.msword.update.service.WordUpdateModel;
-import vijay.poc.msword.update.service.docx4j.CTBookmarkUpdateService;
+import vijay.poc.msword.update.service.docx4j.WordBookmarkUpdateService;
 
 public class CTBookmarkUpdateServiceTest {
 
@@ -35,7 +35,7 @@ public class CTBookmarkUpdateServiceTest {
 
 		wordGenerateModel.setWordContent(wordContentMap);
 
-		CTBookmarkUpdateService service = new CTBookmarkUpdateService();
+		WordBookmarkUpdateService service = new WordBookmarkUpdateService();
 		service.updateWordDocument(wordGenerateModel);
 
 		Assertions.assertTrue(true);

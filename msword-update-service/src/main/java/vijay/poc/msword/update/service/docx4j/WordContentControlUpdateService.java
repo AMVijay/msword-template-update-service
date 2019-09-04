@@ -23,7 +23,7 @@ import vijay.poc.msword.update.service.WordUpdateModel;
  * @author Vijay
  *
  */
-public class ContentControlUpdateService implements IWordUpdateService {
+public class WordContentControlUpdateService implements IWordUpdateService {
 
 	@Override
 	public void updateWordDocument(WordUpdateModel wordUpdateModel) {

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import vijay.poc.msword.update.service.WordUpdateModel;
-import vijay.poc.msword.update.service.docx4j.ContentControlUpdateService;
+import vijay.poc.msword.update.service.docx4j.WordContentControlUpdateService;
 
 public class ContentControlUpdateServiceTest {
 	
@@ -30,7 +30,7 @@ public class ContentControlUpdateServiceTest {
 
         wordGenerateModel.setWordContent(wordContentMap);
         
-        ContentControlUpdateService service = new ContentControlUpdateService();
+        WordContentControlUpdateService service = new WordContentControlUpdateService();
         service.updateWordDocument(wordGenerateModel);
 	}
 

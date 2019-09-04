@@ -27,7 +27,7 @@ import vijay.poc.msword.update.service.WordUpdateModel;
  * @author Vijay
  *
  */
-public class CTBookmarkUpdateService implements IWordUpdateService {
+public class WordBookmarkUpdateService implements IWordUpdateService {
 
 	/**
 	 * Method to update bookmark text content.

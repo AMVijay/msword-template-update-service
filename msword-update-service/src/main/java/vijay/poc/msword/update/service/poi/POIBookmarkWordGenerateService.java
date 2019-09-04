@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.poi;
+package vijay.poc.msword.update.service.poi;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,8 +10,8 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBookmark;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 public class POIBookmarkWordGenerateService implements IWordUpdateService {
 

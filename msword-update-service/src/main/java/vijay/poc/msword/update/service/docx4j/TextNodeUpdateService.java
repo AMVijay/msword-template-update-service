@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.docx4j;
+package vijay.poc.msword.update.service.docx4j;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +14,8 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.Text;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 /**
  * Method to update Text nodes in word by matching the exact phrase.

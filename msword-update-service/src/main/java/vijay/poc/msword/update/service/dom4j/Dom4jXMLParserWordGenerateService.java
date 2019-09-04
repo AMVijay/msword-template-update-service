@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.dom4j;
+package vijay.poc.msword.update.service.dom4j;
 
 import java.io.File;
 import java.util.Iterator;
@@ -11,8 +11,8 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 public class Dom4jXMLParserWordGenerateService implements IWordUpdateService {
 

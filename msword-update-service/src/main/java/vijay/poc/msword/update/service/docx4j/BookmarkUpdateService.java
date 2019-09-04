@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.docx4j;
+package vijay.poc.msword.update.service.docx4j;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.CTBookmark;
 import org.docx4j.wml.P;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 public class BookmarkUpdateService implements IWordUpdateService {
 

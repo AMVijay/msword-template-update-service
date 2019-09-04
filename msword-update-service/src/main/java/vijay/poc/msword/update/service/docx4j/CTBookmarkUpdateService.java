@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.docx4j;
+package vijay.poc.msword.update.service.docx4j;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +19,8 @@ import org.docx4j.wml.P;
 import org.docx4j.wml.R;
 import org.docx4j.wml.Text;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 /**
  * CTBookmarkUpdateService - class to update bookmark text content.

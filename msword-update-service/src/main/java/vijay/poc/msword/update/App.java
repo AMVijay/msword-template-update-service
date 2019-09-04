@@ -1,4 +1,4 @@
-package vijay.java.msword.update;
+package vijay.poc.msword.update;
 
 /**
  * Hello world!

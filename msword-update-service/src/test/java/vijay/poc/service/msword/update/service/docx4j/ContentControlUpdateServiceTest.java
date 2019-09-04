@@ -1,4 +1,4 @@
-package vijay.java.service.msword.update.service.docx4j;
+package vijay.poc.service.msword.update.service.docx4j;
 
 import java.io.File;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import vijay.java.msword.update.service.WordUpdateModel;
-import vijay.java.msword.update.service.docx4j.ContentControlUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.docx4j.ContentControlUpdateService;
 
 public class ContentControlUpdateServiceTest {
 	

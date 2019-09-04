@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service;
+package vijay.poc.msword.update.service;
 
 import java.io.File;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.regex;
+package vijay.poc.msword.update.service.regex;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import vijay.java.msword.update.service.IWordUpdateService;
-import vijay.java.msword.update.service.WordUpdateModel;
+import vijay.poc.msword.update.service.IWordUpdateService;
+import vijay.poc.msword.update.service.WordUpdateModel;
 
 public class RegularExpressionWordGenerateService implements IWordUpdateService {
 

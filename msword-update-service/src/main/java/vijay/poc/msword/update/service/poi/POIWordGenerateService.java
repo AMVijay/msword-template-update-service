@@ -1,4 +1,4 @@
-package vijay.java.msword.update.service.poi;
+package vijay.poc.msword.update.service.poi;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

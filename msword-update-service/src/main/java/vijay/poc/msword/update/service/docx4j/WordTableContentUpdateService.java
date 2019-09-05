@@ -50,7 +50,7 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 			Body body = wmlDocumentEl.getBody();
 
 			System.out.println("Service is replacing the Table Content...");
-			updateTableContents(documentPart);
+			updateTableContents(documentPart, wordUpdateModel.getTableContentList());
 //			updateTableContents(body.getContent(), wordUpdateModel.getWordContent());
 
 			System.out.println("Service completed Bookmark - Text Content");
@@ -64,50 +64,64 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 		}
 	}
 
-	private void updateTableContents(MainDocumentPart documentPart) {
+	private void updateTableContents(MainDocumentPart documentPart, List<List<String>> tableContentList) {
 		List<Object> tableList = getAllElementFromObject(documentPart, Tbl.class);
 		for (Object object : tableList) {
 			Object unwrappedObject = XmlUtils.unwrap(object);
 			if (unwrappedObject instanceof Tbl) {
 				Tbl table = (Tbl) unwrappedObject;
 				System.out.println("Table Object Matched");
-				updateTableHeaderRow(table.getContent());
-
+				updateTableRowContent(table, tableContentList);
 			}
 		}
 	}
 
-	private void updateTableHeaderRow(List<Object> objectList) {
-		if (objectList != null && !objectList.isEmpty()) {
-			Object object = objectList.get(0);
-			Object unwrappedObject = XmlUtils.unwrap(object);
-			if (unwrappedObject instanceof Tr) {
-				Tr tableRow = (Tr) unwrappedObject;
-				System.out.println("");
-				updateTableColumn(tableRow.getContent());
+	private void updateTableRowContent(Tbl table, List<List<String>> tableContentList) {
+		if (table.getContent() != null && !table.getContent().isEmpty()) {
+			List<Tr> newTableRows = new ArrayList<Tr>();
+			for (int i = 0; i < tableContentList.size(); i++) {
+				if (i < table.getContent().size()) {
+					Object unwrappedObject = XmlUtils.unwrap(table.getContent().get(i));
+					if (unwrappedObject instanceof Tr) {
+						Tr tableRow = (Tr) unwrappedObject;
+						updateTableColumn(tableRow, tableContentList.get(i));
+					}
+				} else {
+					if (table.getContent().get(table.getContent().size() - 1) != null) {
+						Object unwrappedObject = XmlUtils.unwrap(table.getContent().get(table.getContent().size()-1));
+						if (unwrappedObject instanceof Tr) {
+							Tr workingRow = (Tr) XmlUtils.deepCopy((Tr) unwrappedObject);
+							updateTableColumn(workingRow, tableContentList.get(i));
+							newTableRows.add(workingRow);
+						}
+					}
+				}
 			}
+			table.getContent().addAll(newTableRows);
 		}
 	}
 
-	private void updateTableColumn(List<Object> objectList) {
-		if (objectList != null && !objectList.isEmpty()) {
-			for (Object object : objectList) {
+	private void updateTableColumn(Tr tableRow, List<String> tableRowContentList) {
+		if (tableRow.getContent() != null && !tableRow.getContent().isEmpty()) {
+			int i = 0;
+			for (Object object : tableRow.getContent()) {
 				Object unwrappedObject = XmlUtils.unwrap(object);
 				if (unwrappedObject instanceof Tc) {
 					Tc tableColumn = (Tc) unwrappedObject;
-					updateParagraphContent(tableColumn.getContent());
+					updateParagraphContent(tableColumn.getContent(), tableRowContentList.get(i));
+					i++;
 				}
 			}
 		}
 	}
 
-	private void updateParagraphContent(List<Object> objectList) {
+	private void updateParagraphContent(List<Object> objectList, String columnContent) {
 
 		for (Object object : objectList) {
 			Object unwrappedObject = XmlUtils.unwrap(object);
 			if (unwrappedObject instanceof P) {
 				P p = (P) unwrappedObject;
-				updateRunObjectTextContent(p.getContent(), "Column Header Value");
+				updateRunObjectTextContent(p.getContent(), columnContent);
 			}
 		}
 	}

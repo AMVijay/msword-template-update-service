@@ -37,7 +37,7 @@ public class RegularExpressionWordGenerateService implements IWordUpdateService 
 			while (contentLine != null) {
 
 				for (String patternString : regularExpressionPatternList) {
-					contentLine = checkContentAndReplaceUsingPattern(contentLine, patternString, wordGenerateModel.getWordContent());
+					contentLine = checkContentAndReplaceUsingPattern(contentLine, patternString, wordGenerateModel.getBookmarkContent());
 				}
 				System.out.println("SEcond Time Check");
 				// checkContentAndReplaceUsingPattern(contentLine,

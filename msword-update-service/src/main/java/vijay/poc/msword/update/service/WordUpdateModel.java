@@ -1,6 +1,7 @@
 package vijay.poc.msword.update.service;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import lombok.Data;
@@ -13,5 +14,7 @@ public class WordUpdateModel {
 	private File outputFilePath;
 
 	private Map<String, String> bookmarkContent;
+
+	private List<List<String>> tableContentList;
 
 }

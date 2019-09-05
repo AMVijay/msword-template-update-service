@@ -36,7 +36,7 @@ public class TextNodeUpdateServiceTest {
         wordContentMap.put("columnname", "record1");
         wordContentMap.put("columndescription", "record description");
         
-        wordUpdateModel.setWordContent(wordContentMap);
+        wordUpdateModel.setBookmarkContent(wordContentMap);
 
         TextNodeUpdateService service = new TextNodeUpdateService();
         service.updateWordDocument(wordUpdateModel);

@@ -26,14 +26,14 @@ public class BookmarkUpdateService implements IWordUpdateService {
 		try {
 
 			Map<DataFieldName, String> map = new HashMap<DataFieldName, String>();
-			wordGenerateModel.getWordContent().entrySet().forEach(entry -> {
+			wordGenerateModel.getBookmarkContent().entrySet().forEach(entry -> {
 				map.put(new DataFieldName(entry.getKey()), entry.getValue());
 			});
 
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(wordGenerateModel.getInputFilePath());
 			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 
-			replaceBookmarkContents(documentPart, wordGenerateModel.getWordContent());
+			replaceBookmarkContents(documentPart, wordGenerateModel.getBookmarkContent());
 
 			// save the docx...
 			wordMLPackage.save(wordGenerateModel.getOutputFilePath());

@@ -1,21 +1,22 @@
 package vijay.poc.msword.update.service.docx4j;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.docx4j.TraversalUtil;
+import javax.xml.bind.JAXBElement;
+
 import org.docx4j.XmlUtils;
-import org.docx4j.dml.CTTable;
-import org.docx4j.finders.RangeFinder;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.Body;
-import org.docx4j.wml.CTBookmark;
-import org.docx4j.wml.CTMarkupRange;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.P;
 import org.docx4j.wml.R;
+import org.docx4j.wml.Tbl;
+import org.docx4j.wml.Tc;
+import org.docx4j.wml.Text;
+import org.docx4j.wml.Tr;
 
 import vijay.poc.msword.update.service.IWordUpdateService;
 import vijay.poc.msword.update.service.WordUpdateModel;
@@ -49,7 +50,8 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 			Body body = wmlDocumentEl.getBody();
 
 			System.out.println("Service is replacing the Table Content...");
-			updateTableContents(body.getContent(), wordUpdateModel.getWordContent());
+			updateTableContents(documentPart);
+//			updateTableContents(body.getContent(), wordUpdateModel.getWordContent());
 
 			System.out.println("Service completed Bookmark - Text Content");
 
@@ -62,74 +64,99 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 		}
 	}
 
-	/**
-	 * Method to update Table Contents.
-	 * 
-	 * @param wordObjects as List of Objects.
-	 * @param wordContent
-	 */
-	private void updateTableContents(List<Object> wordObjects, Map<String, String> wordContent) {
+	private void updateTableContents(MainDocumentPart documentPart) {
+		List<Object> tableList = getAllElementFromObject(documentPart, Tbl.class);
+		for (Object object : tableList) {
+			Object unwrappedObject = XmlUtils.unwrap(object);
+			if (unwrappedObject instanceof Tbl) {
+				Tbl table = (Tbl) unwrappedObject;
+				System.out.println("Table Object Matched");
+				updateTableHeaderRow(table.getContent());
 
-		RangeFinder rangeFinder = new RangeFinder("CTBookmark", "CTMarkupRange");
-		new TraversalUtil(wordObjects, rangeFinder);
+			}
+		}
+	}
 
-		for (CTBookmark bookmark : rangeFinder.getStarts()) {
-			if (wordContent.get(bookmark.getName()) != null) {
-				System.out.println("Bookmark Name :: " + bookmark.getName() + " ;Bookmark ID :: " + bookmark.getId());
-				if (bookmark.getParent() instanceof P) {
+	private void updateTableHeaderRow(List<Object> objectList) {
+		if (objectList != null && !objectList.isEmpty()) {
+			Object object = objectList.get(0);
+			Object unwrappedObject = XmlUtils.unwrap(object);
+			if (unwrappedObject instanceof Tr) {
+				Tr tableRow = (Tr) unwrappedObject;
+				System.out.println("");
+				updateTableColumn(tableRow.getContent());
+			}
+		}
+	}
 
-					List<Object> objectList = ((ContentAccessor) (bookmark.getParent())).getContent();
-					updateParagraphContent(objectList, bookmark);
+	private void updateTableColumn(List<Object> objectList) {
+		if (objectList != null && !objectList.isEmpty()) {
+			for (Object object : objectList) {
+				Object unwrappedObject = XmlUtils.unwrap(object);
+				if (unwrappedObject instanceof Tc) {
+					Tc tableColumn = (Tc) unwrappedObject;
+					updateParagraphContent(tableColumn.getContent());
 				}
 			}
 		}
 	}
 
-	/**
-	 * Update Paragraph Content.
-	 * 
-	 * @param objectList as List of Object.
-	 * @param bookmark   as CTBookmark.
-	 */
-	private void updateParagraphContent(List<Object> objectList, CTBookmark bookmark) {
+	private void updateParagraphContent(List<Object> objectList) {
 
-		boolean bookmarkRangeStarted = false;
-		boolean textUpdated = false;
-		
 		for (Object object : objectList) {
 			Object unwrappedObject = XmlUtils.unwrap(object);
-			if (unwrappedObject instanceof CTBookmark) {
-				CTBookmark bookmarkStart = (CTBookmark) unwrappedObject;
-				if (bookmarkStart.getId() == bookmark.getId()) {
-					System.out.println("BOOKMARK Name " + bookmarkStart.getName() + " ; BOOKMARK ID " + bookmarkStart.getId());
-					bookmarkRangeStarted = true;
-				}
-			} else if (unwrappedObject instanceof CTMarkupRange && bookmarkRangeStarted) {
-				CTMarkupRange bookmarkEnd = (CTMarkupRange) unwrappedObject;
-				// System.out.println("BOOKMARK End :: " + bookmarkEnd.getId());
-				if (bookmark.getId().intValue() == bookmarkEnd.getId().intValue()) {
-					System.out.println("BOOKMARK Name " + bookmark.getName() + " text update completed");
-					bookmarkRangeStarted = false;
-				}
-			} else if (bookmarkRangeStarted && unwrappedObject instanceof R) {
-				System.out.println("Word Runtime Node matched");
-				R runTime = (R) unwrappedObject;
-				if (!textUpdated) {
-					System.out.println("Replacing actual Text Content");
-					updateRunObjectTableContent(runTime.getContent());
-					textUpdated = true;
-				} 
+			if (unwrappedObject instanceof P) {
+				P p = (P) unwrappedObject;
+				updateRunObjectTextContent(p.getContent(), "Column Header Value");
 			}
 		}
 	}
 
-	
-	private void updateRunObjectTableContent(List<Object> objectList) {
-		
+	private static final String BLANK_VALUE = "";
+
+	/**
+	 * Method to update Text Element.
+	 * 
+	 * @param objectList
+	 * @param textContent
+	 */
+	private void updateRunObjectTextContent(List<Object> objectList, String textContent) {
+		boolean textUpdateCompleted = false;
 		for (Object object : objectList) {
 			Object unwrappedObject = XmlUtils.unwrap(object);
+			if (unwrappedObject instanceof R) {
+				R r = (R) unwrappedObject;
+				for (Object object1 : r.getContent()) {
+					Object unwrappedObject1 = XmlUtils.unwrap(object1);
+					if (unwrappedObject1 instanceof Text) {
+						Text text = (Text) unwrappedObject1;
+						if (!textUpdateCompleted) {
+							text.setValue(textContent);
+							textUpdateCompleted = true;
+						} else {
+							text.setValue(BLANK_VALUE);
+						}
+					}
+				}
+			}
 		}
-		
+	}
+
+	private static List<Object> getAllElementFromObject(Object obj, Class<?> toSearch) {
+		List<Object> result = new ArrayList<Object>();
+		if (obj instanceof JAXBElement)
+			obj = ((JAXBElement<?>) obj).getValue();
+
+		if (obj.getClass().equals(toSearch))
+			result.add(obj);
+		else if (obj instanceof ContentAccessor) {
+			List<?> children = ((ContentAccessor) obj).getContent();
+			for (Object child : children) {
+				result.addAll(getAllElementFromObject(child, toSearch));
+			}
+
+		}
+		return result;
 	}
 
 }

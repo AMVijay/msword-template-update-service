@@ -23,7 +23,7 @@ public class WordTableContentUpdateServiceTest {
 		wordUpdateModel.setOutputFilePath(new File(outputFolder + wordUpdateModel.getInputFilePath().getName()));
 
 		Map<String, String> wordContentMap = new HashMap<String, String>();
-		wordContentMap.put("tablecontent", "tablecontent");		
+		wordContentMap.put("tablecontent", "tablecontent");
 		wordUpdateModel.setWordContent(wordContentMap);
 
 		WordTableContentUpdateService service = new WordTableContentUpdateService();

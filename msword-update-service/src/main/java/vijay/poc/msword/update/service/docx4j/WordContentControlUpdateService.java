@@ -31,7 +31,7 @@ public class WordContentControlUpdateService implements IWordUpdateService {
 		try {
 
 			Map<DataFieldName, String> map = new HashMap<DataFieldName, String>();
-			wordUpdateModel.getWordContent().entrySet().forEach(entry -> {
+			wordUpdateModel.getBookmarkContent().entrySet().forEach(entry -> {
 				map.put(new DataFieldName(entry.getKey()), entry.getValue());
 			});
 
@@ -40,7 +40,7 @@ public class WordContentControlUpdateService implements IWordUpdateService {
 			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 			
 			System.out.println("Going to update Content Controls");
-			replaceContentControls(documentPart, wordUpdateModel.getWordContent());
+			replaceContentControls(documentPart, wordUpdateModel.getBookmarkContent());
 
 			// save the docx...
 			wordMLPackage.save(wordUpdateModel.getOutputFilePath());

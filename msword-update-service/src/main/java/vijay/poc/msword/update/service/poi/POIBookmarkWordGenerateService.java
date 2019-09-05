@@ -27,7 +27,7 @@ public class POIBookmarkWordGenerateService implements IWordUpdateService {
             
             final XWPFDocument document = new XWPFDocument(new FileInputStream(filePath));
 
-            wordGenerateModel.getWordContent().entrySet().forEach(entry -> {
+            wordGenerateModel.getBookmarkContent().entrySet().forEach(entry -> {
                 for (XWPFParagraph paragraph : document.getParagraphs()) {
 
                     for(CTBookmark bookmark: paragraph.getCTP().getBookmarkStartList()){

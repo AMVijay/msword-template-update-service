@@ -28,7 +28,7 @@ public class ContentControlUpdateServiceTest {
         wordContentMap.put("-433902062", "Mr.");
         wordContentMap.put("-1031495007", "Test User First Name");
 
-        wordGenerateModel.setWordContent(wordContentMap);
+        wordGenerateModel.setBookmarkContent(wordContentMap);
         
         WordContentControlUpdateService service = new WordContentControlUpdateService();
         service.updateWordDocument(wordGenerateModel);

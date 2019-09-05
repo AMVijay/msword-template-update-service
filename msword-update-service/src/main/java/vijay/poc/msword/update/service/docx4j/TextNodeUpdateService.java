@@ -32,7 +32,7 @@ public class TextNodeUpdateService implements IWordUpdateService {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(wordGenerateModel.getInputFilePath());
             MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 
-            replaceTextContent(documentPart, wordGenerateModel.getWordContent());
+            replaceTextContent(documentPart, wordGenerateModel.getBookmarkContent());
 
             // save the docx...
             wordMLPackage.save(wordGenerateModel.getOutputFilePath());

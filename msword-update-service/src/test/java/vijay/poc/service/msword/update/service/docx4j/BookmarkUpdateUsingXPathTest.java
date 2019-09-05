@@ -30,7 +30,7 @@ public class BookmarkUpdateUsingXPathTest {
 		wordContentMap.put("Suffix", " ");
 		wordContentMap.put("columnname", "record1");
 		wordContentMap.put("columndescription", "record description");
-		wordGenerateModel.setWordContent(wordContentMap);
+		wordGenerateModel.setBookmarkContent(wordContentMap);
 		
 		BookmarkUpdateService service = new BookmarkUpdateService();
 		service.updateWordDocument(wordGenerateModel);

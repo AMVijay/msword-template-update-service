@@ -33,7 +33,7 @@ public class CTBookmarkUpdateServiceTest {
 		wordContentMap.put("columnname", "record1");
 		wordContentMap.put("columndescription", "record description");
 
-		wordGenerateModel.setWordContent(wordContentMap);
+		wordGenerateModel.setBookmarkContent(wordContentMap);
 
 		WordBookmarkUpdateService service = new WordBookmarkUpdateService();
 		service.updateWordDocument(wordGenerateModel);

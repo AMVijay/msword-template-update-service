@@ -39,7 +39,7 @@ public class WordBookmarkUpdateService implements IWordUpdateService {
 		try {
 
 			Map<DataFieldName, String> map = new HashMap<DataFieldName, String>();
-			wordUpdateModel.getWordContent().entrySet().forEach(entry -> {
+			wordUpdateModel.getBookmarkContent().entrySet().forEach(entry -> {
 				map.put(new DataFieldName(entry.getKey()), entry.getValue());
 			});
 

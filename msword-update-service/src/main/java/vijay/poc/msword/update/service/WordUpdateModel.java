@@ -12,6 +12,6 @@ public class WordUpdateModel {
 
 	private File outputFilePath;
 
-	private Map<String, String> wordContent;
+	private Map<String, String> bookmarkContent;
 
 }

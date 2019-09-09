@@ -2,9 +2,7 @@ package vijay.poc.service.msword.update.service.docx4j;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +21,8 @@ public class WordTableContentUpdateServiceTest {
 
 		wordUpdateModel.setInputFilePath(new File(templateFolder + "template-bookmark.docx"));
 		wordUpdateModel.setOutputFilePath(new File(outputFolder + wordUpdateModel.getInputFilePath().getName()));
+		
+		wordUpdateModel.setTableBookmarkName("tablecontent");
 
 		List<List<String>> tableContentList = new ArrayList<List<String>>();
 		for (int i = 0; i < 20; i++) {

@@ -15,6 +15,7 @@ public class WordUpdateModel {
 
 	private Map<String, String> bookmarkContent;
 
+	private String tableBookmarkName;
 	private List<List<String>> tableContentList;
 
 }

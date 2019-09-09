@@ -3,14 +3,13 @@ package vijay.poc.msword.update.service.docx4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 
 import org.docx4j.XmlUtils;
+import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.Body;
-import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.P;
 import org.docx4j.wml.R;
 import org.docx4j.wml.Tbl;
@@ -32,8 +31,8 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 	/**
 	 * Method to update Word Template Table Content.
 	 * 
-	 * @param word
-	 * @throws Docx4JException
+	 * @param wordUpdateModel as {@link WordUpdateModel}
+	 * @throws Docx4JException.
 	 */
 	@Override
 	public void updateWordDocument(WordUpdateModel wordUpdateModel) {
@@ -46,12 +45,10 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 			System.out.println("Service is loading the MainDocument Object from WordML...");
 			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 
-			org.docx4j.wml.Document wmlDocumentEl = (org.docx4j.wml.Document) documentPart.getJaxbElement();
-			Body body = wmlDocumentEl.getBody();
-
 			System.out.println("Service is replacing the Table Content...");
-			updateTableContents(documentPart, wordUpdateModel.getTableContentList());
-//			updateTableContents(body.getContent(), wordUpdateModel.getWordContent());
+			// updateTableContents(documentPart, wordUpdateModel.getTableContentList());
+
+			updateTableElementWithinBookmark(documentPart, wordUpdateModel.getTableBookmarkName(), wordUpdateModel.getTableContentList());
 
 			System.out.println("Service completed Bookmark - Text Content");
 
@@ -64,18 +61,41 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 		}
 	}
 
-	private void updateTableContents(MainDocumentPart documentPart, List<List<String>> tableContentList) {
-		List<Object> tableList = getAllElementFromObject(documentPart, Tbl.class);
-		for (Object object : tableList) {
-			Object unwrappedObject = XmlUtils.unwrap(object);
-			if (unwrappedObject instanceof Tbl) {
-				Tbl table = (Tbl) unwrappedObject;
-				System.out.println("Table Object Matched");
-				updateTableRowContent(table, tableContentList);
-			}
+	/**
+	 * Method to update WordML Table Content after the bookmark.
+	 * 
+	 * @param documentPart     as {@link MainDocumentPart}
+	 * @param bookmarkName     as {@link String}
+	 * @param tableContentList as {@link List} of {@link List} of {@link String}.
+	 */
+	private void updateTableElementWithinBookmark(MainDocumentPart documentPart, String bookmarkName, List<List<String>> tableContentList) {
+
+		System.out.println("findTableElementWithinBookmark start");
+
+		String xpath = "//w:bookmarkStart[@w:name=\"" + bookmarkName + "\"]/../following-sibling::*[1][self::w:tbl]";
+		try {
+			List<Object> xPathMatchedObjectList = documentPart.getJAXBNodesViaXPath(xpath, false);
+			xPathMatchedObjectList.forEach(object -> {
+				System.out.println("");
+				Object unwrappedObject = XmlUtils.unwrap(object);
+				if (unwrappedObject instanceof Tbl) {
+					Tbl table = (Tbl) unwrappedObject;
+					System.out.println("Table Object Matched");
+					updateTableRowContent(table, tableContentList);
+				}
+			});
+		} catch (XPathBinderAssociationIsPartialException | JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Method to update WordML Table Row Content.
+	 * 
+	 * @param table            as {@link Tbl}.
+	 * @param tableContentList as {@link List} of {@link List} of {@link String}.
+	 */
 	private void updateTableRowContent(Tbl table, List<List<String>> tableContentList) {
 		if (table.getContent() != null && !table.getContent().isEmpty()) {
 			List<Tr> newTableRows = new ArrayList<Tr>();
@@ -88,7 +108,7 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 					}
 				} else {
 					if (table.getContent().get(table.getContent().size() - 1) != null) {
-						Object unwrappedObject = XmlUtils.unwrap(table.getContent().get(table.getContent().size()-1));
+						Object unwrappedObject = XmlUtils.unwrap(table.getContent().get(table.getContent().size() - 1));
 						if (unwrappedObject instanceof Tr) {
 							Tr workingRow = (Tr) XmlUtils.deepCopy((Tr) unwrappedObject);
 							updateTableColumn(workingRow, tableContentList.get(i));
@@ -101,6 +121,12 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 		}
 	}
 
+	/**
+	 * Method to update WordML Table Column.
+	 * 
+	 * @param tableRow            as {@link Tr}
+	 * @param tableRowContentList as {@link List} of {@link String}.
+	 */
 	private void updateTableColumn(Tr tableRow, List<String> tableRowContentList) {
 		if (tableRow.getContent() != null && !tableRow.getContent().isEmpty()) {
 			int i = 0;
@@ -115,6 +141,12 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 		}
 	}
 
+	/**
+	 * Method to update Word Text Value in Paragraph.
+	 * 
+	 * @param objectList    as {@link List} of {@link Object}.
+	 * @param columnContent as {@link String}.
+	 */
 	private void updateParagraphContent(List<Object> objectList, String columnContent) {
 
 		for (Object object : objectList) {
@@ -131,8 +163,8 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 	/**
 	 * Method to update Text Element.
 	 * 
-	 * @param objectList
-	 * @param textContent
+	 * @param objectList  as {@link List} of {@link Object}.
+	 * @param textContent as {@link String}
 	 */
 	private void updateRunObjectTextContent(List<Object> objectList, String textContent) {
 		boolean textUpdateCompleted = false;
@@ -154,23 +186,6 @@ public class WordTableContentUpdateService implements IWordUpdateService {
 				}
 			}
 		}
-	}
-
-	private static List<Object> getAllElementFromObject(Object obj, Class<?> toSearch) {
-		List<Object> result = new ArrayList<Object>();
-		if (obj instanceof JAXBElement)
-			obj = ((JAXBElement<?>) obj).getValue();
-
-		if (obj.getClass().equals(toSearch))
-			result.add(obj);
-		else if (obj instanceof ContentAccessor) {
-			List<?> children = ((ContentAccessor) obj).getContent();
-			for (Object child : children) {
-				result.addAll(getAllElementFromObject(child, toSearch));
-			}
-
-		}
-		return result;
 	}
 
 }

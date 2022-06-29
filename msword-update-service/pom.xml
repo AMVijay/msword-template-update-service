@@ -11,7 +11,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<junit.jupiter.version>5.5.1</junit.jupiter.version>
-		<apache.poi.version>4.1.0</apache.poi.version>
+		<apache.poi.version>4.1.1</apache.poi.version>
 		<docx4j.versoin>6.1.2</docx4j.versoin>
 		<lombok.version>1.18.8</lombok.version>
 	</properties>
